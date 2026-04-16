@@ -1,0 +1,37 @@
+services:
+  # The Backend Web Service (Docker)
+  - type: web
+    name: demo-backend
+    env: docker
+    plan: free
+    rootDir: containerization-demo/backend
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: tasksdb
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: tasksdb
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: tasksdb
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: tasksdb
+          property: database
+
+  # The Frontend Static Site
+  - type: web
+    name: demo-frontend
+    runtime: static
+    rootDir: containerization-demo/frontend
+    buildCommand: "" # No build step required for plain HTML
+    staticPublishPath: .
+
+databases:
+  # The PostgreSQL Database
+  - name: tasksdb
+    plan: free
